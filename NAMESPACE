@@ -1,0 +1,50 @@
+import(MASS)
+import(gtools)
+import(SignifReg)
+import(sp)
+import(mblm)
+import(gstat)
+import(gam)
+import(RobustLinearReg)
+importFrom(zoo, rollapply)
+importFrom(purrr, possibly)
+importFrom("stats", "cor", "formula", "lm", "predict", "quantile",
+               "sd")
+
+
+export(patern_distans_change)
+export(patern_search)
+export(rank_val)
+export(NR)
+export(NR_1952)
+export(CWM)
+export(OI)
+export(AA)
+export(AM)
+export(NN)
+export(SBE)
+export(UK)
+export(TSLR)
+export(MLR)
+export(RMLR)
+export(Ord_kriging)
+export(Uni_kriging_Alt)
+export(Uni_kriging)
+export(RNNWM)
+export(IDW_simple)
+export(IDW)
+export(gam_missing)
+export(RMLR_ranked)
+export(MLR_ranked)
+export(TSLR_ranked)
+export(interpolate_all)
+
+
+
+
+
+
+
+
+
+

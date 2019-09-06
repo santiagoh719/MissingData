@@ -1,0 +1,23 @@
+Package: MissingData
+Type: Package
+Title: Missing Data Filling
+Version: 0.1.0
+Author: Hurtado I. Santiago
+Maintainer: Hurtado I. Santiago <santih@carina.unlp.edu.ar>
+Description: This package compute several interpolation method for filling missing data.
+License: GPL-3
+Depends: R (>= 3.1.0)
+Imports: 
+        gtools,
+        purrr,
+        zoo,
+        MASS,
+	SignifReg,
+	sp,
+	mblm,
+	gstat,
+	gam,
+	RobustLinearReg
+ByteCompile: yes
+Encoding: UTF-8
+LazyData: true
