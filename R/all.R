@@ -9,7 +9,7 @@ interpolate_all <- function(Est_target,CF = FALSE,CF_fun='median',fun,...){
     new_target <- rep(NA,length(Est_target))
     na_index <- which(!na)
     for(i in na_index){
-      new_target[i] <- my_fun(Est_target = Est_target,i=i,...)
+      new_target[i] <- my_fun(Est_target = Est_target,i=i,...) - Est_target
     }
     if(CF_fun == 'median'){
       CC <- median(new_target,na.rm = T)
