@@ -1,4 +1,4 @@
-UK <-  function(Est_target, Est_reference, i){
+UK <-  function(Est_target, Est_reference, i, cord = NULL, dist = NULL){
   #' UK traditional method
   #' Hasanpur Kashani & Dinpashoh 2012
   #' Est_target a vector with the data of the target station
@@ -35,7 +35,7 @@ UK <-  function(Est_target, Est_reference, i){
   return(Est_reference[i,est] * mean(Est_target,na.rm = T)/mean(Est_reference[,est],na.rm = T) )
 }
 
-NR <- function(Est_target, Est_reference, i){
+NR <- function(Est_target, Est_reference, i, cord = NULL, dist = NULL){
   #' Normal Ratio method
   #' Proposed by Paulhus y Kohler 1952
   #' Modified by Young 1992
@@ -63,7 +63,7 @@ NR <- function(Est_target, Est_reference, i){
   return(sum(w*Est_reference[i,],na.rm = T)/sum(w))
 }
 
-NR_1952 <- function(Est_target, Est_reference, i, tt='month'){
+NR_1952 <- function(Est_target, Est_reference, i, tt='month', cord = NULL, dist = NULL){
   #' Normal Ratio method
   #' Proposed by Paulhus y Kohler 1952
   #' Est_target a vector with the data of the target station
@@ -112,7 +112,7 @@ NR_1952 <- function(Est_target, Est_reference, i, tt='month'){
 
 }
 
-CWM <- function(Est_target, Est_reference, i){
+CWM <- function(Est_target, Est_reference, i, cord = NULL, dist = NULL){
   #' Correlation weighting method
   #' Est_target a vector with the data of the target station
   #' Est_reference a matrix or data.frame with the reference stations by columms

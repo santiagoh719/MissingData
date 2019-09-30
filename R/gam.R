@@ -1,4 +1,4 @@
-gam_missing <- function(Est_target, Est_reference,i, n = 4){
+gam_missing <- function(Est_target, Est_reference,i, n = 4, cord = NULL, dist = NULL){
   #' Est_target a vector with the data of the target station
   #' Est_reference a matrix or data.frame with the reference stations by columms
   #' i the index to by estemated
