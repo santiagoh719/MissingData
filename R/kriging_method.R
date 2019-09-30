@@ -1,4 +1,4 @@
-Ord_kriging <- function( Est_reference, i, cord, method = NULL){
+Ord_kriging <- function( Est_reference, i, cord, method = NULL,  Est_target = NULL){
   #' Ordinary kriging using sp and gstat packge; only interpolate 1 value to the target station
   #' Est_reference a matrix or data.frame with the reference stations by columms
   #' i the index to by estemated
@@ -51,7 +51,7 @@ Ord_kriging <- function( Est_reference, i, cord, method = NULL){
   return(val)
 }
 
-Uni_kriging_Alt <- function(Est_reference, i, cord,method = NULL ){
+Uni_kriging_Alt <- function(Est_reference, i, cord,method = NULL,  Est_target = NULL ){
   #' Universal kriging using sp and gstat packge; only interpolate 1 value to the target station
   #' Use as a explicative variable the altitude
   #' Est_reference a matrix or data.frame with the reference stations by columms
@@ -107,7 +107,7 @@ Uni_kriging_Alt <- function(Est_reference, i, cord,method = NULL ){
   return(val)
 }
 
-Uni_kriging <- function(Est_reference,Est_reference_var, var_target, i, cord, method = NULL){
+Uni_kriging <- function(Est_reference,Est_reference_var, var_target, i, cord, method = NULL,  Est_target = NULL){
   #' Universal kriging using sp and gstat packge; only interpolate 1 value to the target station
   #' Use as a explicative variable the altitude
   #' Est_reference a matrix or data.frame with the reference stations by columms width the variable to fit
