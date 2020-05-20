@@ -9,7 +9,7 @@ import(RobustLinearReg)
 importFrom(zoo, rollapply)
 importFrom(purrr, possibly)
 importFrom("stats", "cor", "formula", "lm", "predict", "quantile",
-               "sd")
+               "sd","median")
 
 
 export(patern_distans_change)

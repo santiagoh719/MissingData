@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: Hurtado I. Santiago
 Maintainer: Hurtado I. Santiago <santih@carina.unlp.edu.ar>
 Description: This package compute several interpolation method for filling missing data.
-License: GPL-3
+License: file LICENSE
 Depends: R (>= 3.1.0)
 Imports: 
         gtools,
