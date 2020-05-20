@@ -25,7 +25,7 @@
 
   \item{i}{integer, index of the value to interpolated in target}
 
-  \item{tt}{tt is periodicity of sample data, acep month (default), day, hour and 6hour}
+  \item{tt}{tt is periodicity of sample data, acep 'month' (default), 'day', 'hour' and '6hour'}
 
 }
 
