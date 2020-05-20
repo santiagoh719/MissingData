@@ -1,5 +1,5 @@
 
-AA <- function(Est_reference, i, cord = NULL, dist = NULL,  Est_target = NULL){
+AA <- function(Est_reference, i){
   #' Simple aritmetric average
   #' given for the same time
   #' Est_reference a matrix or data.frame with the reference stations by columms
@@ -15,7 +15,7 @@ AA <- function(Est_reference, i, cord = NULL, dist = NULL,  Est_target = NULL){
   return(mean(Est_reference[i,],na.rm = T))
 }
 
-AM <- function(Est_reference, i, cord = NULL, dist = NULL, Est_target = NULL){
+AM <- function(Est_reference, i){
   #' median of reference stations
   #' given for the same time
   #' Est_reference a matrix or data.frame with the reference stations by columms
@@ -32,7 +32,7 @@ AM <- function(Est_reference, i, cord = NULL, dist = NULL, Est_target = NULL){
   return(quantile(Est_reference[i,],0.5,na.rm = T))
 }
 
-NN <- function(Est_reference, i, cord = T , distans = F, Est_target = NULL){
+NN <- function(Est_reference, i, cord = T, distans = F){
   #' Nearest Nightbore, value of nearest station
   #' Est_reference a matrix or data.frame with the reference stations by columms
   #' i the index to by stemated
@@ -60,7 +60,7 @@ NN <- function(Est_reference, i, cord = T , distans = F, Est_target = NULL){
   return(Est_reference[i,which.min(distans[])])
 }
 
-SBE <-  function(Est_target, Est_reference, i, cord = NULL, dist = NULL){
+SBE <-  function(Est_target, Est_reference, i){
   #' Single best estimator method, value of most correlated station
   #' Est_target a vector with the data of the target station
   #' Est_reference a matrix or data.frame with the reference stations by columms

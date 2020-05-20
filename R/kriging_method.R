@@ -1,4 +1,4 @@
-Ord_kriging <- function( Est_reference, i, cord, method = NULL,  Est_target = NULL){
+Ord_kriging <- function( Est_reference, i, cord, method = NULL){
   #' Ordinary kriging using sp and gstat packge; only interpolate 1 value to the target station
   #' Est_reference a matrix or data.frame with the reference stations by columms
   #' i the index to by estemated
@@ -51,7 +51,7 @@ Ord_kriging <- function( Est_reference, i, cord, method = NULL,  Est_target = NU
   return(val)
 }
 
-KED_Alt <- function(Est_reference, i, cord,method = NULL,  Est_target = NULL ){
+KED_Alt <- function(Est_reference, i, cord,method = NULL){
   #' kriging with external drift using sp and gstat packge; only interpolate 1 value to the target station
   #' Use as a explicative variable the altitude
   #' Est_reference a matrix or data.frame with the reference stations by columms
@@ -107,7 +107,7 @@ KED_Alt <- function(Est_reference, i, cord,method = NULL,  Est_target = NULL ){
   return(val)
 }
 
-KED <- function(Est_reference,Est_reference_var, var_target, i, cord, method = NULL,  Est_target = NULL){
+KED <- function(Est_reference,Est_reference_var, var_target, i, cord, method = NULL){
   #' kriging with external drift using sp and gstat packge; only interpolate 1 value to the target station
   #' Use as a explicative variable the altitude
   #' Est_reference a matrix or data.frame with the reference stations by columms width the variable to fit

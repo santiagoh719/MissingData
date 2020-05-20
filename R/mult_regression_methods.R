@@ -1,4 +1,4 @@
-MLR <- function(Est_target, Est_reference,i, criterion='AIC',alpha=0.05, cord = NULL, dist = NULL){
+MLR <- function(Est_target, Est_reference,i, criterion='AIC',alpha=0.05){
   #' Use package SignifReg for multiple lineal regretion
   #' Est_target a vector with the data of the target station
   #' Est_reference a matrix or data.frame with the reference stations by columms
@@ -32,7 +32,7 @@ MLR <- function(Est_target, Est_reference,i, criterion='AIC',alpha=0.05, cord = 
   return(sum(est[i,])+ model$coefficients[1])
 }
 
-RMLR <- function(Est_target, Est_reference,i, M_Method= 'MM', cord = NULL, dist = NULL){
+RMLR <- function(Est_target, Est_reference,i, M_Method= 'MM'){
   #' Use package MASS for robust multiple lineal regretion, using M-Estimator propouse by Huber
   #' Est_target a vector with the data of the target station
   #' Est_reference a matrix or data.frame with the reference stations by columms
@@ -65,7 +65,7 @@ RMLR <- function(Est_target, Est_reference,i, M_Method= 'MM', cord = NULL, dist 
   return(sum(est[i,])+ model$coefficients[1])
 }
 
-MLR_ranked <- function(Est_target, Est_reference,i, criterion='AIC',alpha=0.05, cord = NULL, dist = NULL){
+MLR_ranked <- function(Est_target, Est_reference,i, criterion='AIC',alpha=0.05){
   #' Use package SignifReg for multiple lineal regretion
   #' Est_target a vector with the data of the target station
   #' Est_reference a matrix or data.frame with the reference stations by columms
@@ -106,7 +106,7 @@ MLR_ranked <- function(Est_target, Est_reference,i, criterion='AIC',alpha=0.05, 
   return(val)
 }
 
-RMLR_ranked <- function(Est_target, Est_reference,i, M_Method= 'MM', cord = NULL, dist = NULL){
+RMLR_ranked <- function(Est_target, Est_reference,i, M_Method= 'MM'){
   #' Use package MASS for robust multiple lineal regretion, using M-Estimator propouse by Huber
   #' Est_target a vector with the data of the target station
   #' Est_reference a matrix or data.frame with the reference stations by columms
