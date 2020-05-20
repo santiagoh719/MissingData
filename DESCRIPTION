@@ -1,9 +1,9 @@
 Package: MissingData
 Type: Package
 Title: Missing Data Filling
-Version: 0.1.0
+Version: 1.2
 Author: Hurtado I. Santiago
-Maintainer: Hurtado I. Santiago <santih@carina.unlp.edu.ar>
+Maintainer: Hurtado I. Santiago <santih@carina.fcaglp.unlp.edu.ar>
 Description: This package compute several interpolation method for filling missing data.
 License: file LICENSE
 Depends: R (>= 3.1.0)
