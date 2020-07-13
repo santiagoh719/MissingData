@@ -9,7 +9,14 @@ IDW <- function( Est_reference, i, k, cord = T , distans = F){
   #' Or dist, a vector with the distance to Est_target, in order by reference stations
   #' k the potencial factor
   Est_reference <- as.matrix(Est_reference)
-  if( i > nrow(Est_reference) | i<0 ){stop('Not aceptable value of i or Est_reference is not matrix nor data.frame')}
+  checks <- makeAssertCollection()
+  assert_matrix(x = Est_reference,
+                mode = 'numeric',
+                all.missing = FALSE, add = checks)
+  assert_integerish(x = i, lower = 1,
+                    upper = dim(Est_reference)[1], add = checks)
+  assert_numeric(x = k, len = 1, finite = TRUE, add = checks)
+  reportAssertions(checks)
 
   if(!is.logical(cord)){
     if(ncol(cord)!= 2){stop('not acceptable dimentions of cord, must have 2 columns (Long, Lat)')}
@@ -24,10 +31,13 @@ IDW <- function( Est_reference, i, k, cord = T , distans = F){
     stop('Not enougth stations')
   }
   reference <- data.frame(Est_reference[,ind])
+  if(sum(ind) == 1){
+    return(Est_reference[i])
+  }
   distans <- distans[ind]
   distans <- distans**(-k)
   w <- distans / sum(distans)
-  return( sum(reference[i,]*w,na.rm = T) )
+  return( sum(reference[i,]*w) )
 }
 
 IDW_simple <- function( Est_reference, i, cord = T , distans = F){
@@ -40,8 +50,7 @@ IDW_simple <- function( Est_reference, i, cord = T , distans = F){
   #' Either cord is a matrix of two colums, first Longitud, second Latitud
   #' The first row is the cordinate of target station, then by order the reference stations
   #' Or dist, a vector with the distance to Est_target, in order by reference stations
-  k = 1
-  return(IDW( Est_reference, i, k, cord , distans))
+  return(IDW( Est_reference = Est_reference,i =  i, k = 1, cord = cord , distans = distans))
 }
 
 RNNWM <- function(Est_target, Est_reference, i, k, reg= 1){
@@ -53,16 +62,32 @@ RNNWM <- function(Est_target, Est_reference, i, k, reg= 1){
   #' k the potencial factor
   #' reg is the amount of values to use to create the paterns, 1 and 2 are possible
   #' make_exp, should IDW be exponential, default FALSE
+  Est_target <- as.numeric(Est_target)
   Est_reference <- as.matrix(Est_reference)
-  Est_target <- as.vector(Est_target)
-  if( i > nrow(Est_reference) | i<0 ){stop('Not aceptable value of i or Est_reference is not matrix nor data.frame')}
-  if(nrow(Est_reference) != length(Est_target)){stop('Not coerent dimentions of Est_reference and Est_target')}
+  checks <- makeAssertCollection()
+  assert_matrix(x = Est_reference,
+                mode = 'numeric',
+                all.missing = FALSE, add = checks)
+  assert_integerish(x = i, lower = 1,
+                    upper = dim(Est_reference)[1], add = checks)
+  assert_integerish(x = reg, lower = 1, upper = 2,
+                    len = 1, add = checks)
+  assert_numeric(x = Est_target,
+                 len = dim(Est_reference)[1],
+                 finite = TRUE, all.missing = FALSE, add = checks)
+  assert_numeric(x = k, len = 1, finite = TRUE, add = checks)
+  reportAssertions(checks)
 
   ind <- !is.na(Est_reference[i,])
   if(all(!(ind))){
     stop('Not enougth stations')
   }
   Est_reference <- Est_reference[,ind]
-  distans <- patern_distans_change(Est_target, Est_reference,reg)
-  return(IDW(Est_reference, i, k, distans = distans))
+  if(sum(ind) == 1){
+    return(Est_reference[i])
+  }
+
+
+  distans <- patern_distans_change(Est_target, Est_reference, reg)
+  return(IDW(Est_reference = Est_reference,i =  i,k =  k, distans = distans))
 }

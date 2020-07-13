@@ -3,7 +3,7 @@
 \alias{IDW_simple}
 \alias{RNNWM}
 
-\title{Inverse distance weigth interpolation method}
+\title{Inverse distance weigth interpolation methods}
 \description{
   Fill the ieth data with an inverse distance weigth method.
 }

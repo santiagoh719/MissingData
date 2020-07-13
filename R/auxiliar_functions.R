@@ -1,16 +1,25 @@
 
-patern_distans_change <- function(Est_target, Est_reference, reg= 1){
+patern_distans_change <- function(Est_target, Est_reference, reg = 1){
   #' select the station acording similarity paterns and create a new distans
   #' Est_target a vector with the data of the target station
   #' Est_reference a matrix or data.frame with the reference stations by columms
   #' reg is the amount of values to use to create the paterns
   #' The output is the new "distans" estimated with the paterns
   #' Teegavarapu y chandramouli 2005
-
-
+  #'
+  Est_target <- as.numeric(Est_target)
   Est_reference <- as.matrix(Est_reference)
-  Est_target <- as.vector(Est_target)
-  if(nrow(Est_reference) != length(Est_target)){stop('Not coerent dimentions of Est_reference and Est_target')}
+  checks <- makeAssertCollection()
+  assert_matrix(x = Est_reference,
+                mode = 'numeric',
+                all.missing = FALSE, add = checks)
+  assert_integerish(x = reg, lower = 1, len = 1,
+                    upper = 2, add = checks)
+  assert_numeric(x = Est_target,
+                 len = dim(Est_reference)[1],
+                 finite = TRUE, all.missing = FALSE, add = checks)
+  reportAssertions(checks)
+
 
   n <- length(Est_target)
   paterns <- permutations(n= 3,r = reg,v = c(2,0,1),repeats.allowed = T)
@@ -24,7 +33,7 @@ patern_distans_change <- function(Est_target, Est_reference, reg= 1){
   row <- 0
   for(i in 1:npat){
     row <- row+1
-    pat_cant[row,1] <- length(patern_search(patern = paterns[i,],
+    pat_cant[row,1] <- length(.patern_search(patern = paterns[i,],
                                             vector = targ_pat))
   }
 
@@ -39,7 +48,7 @@ patern_distans_change <- function(Est_target, Est_reference, reg= 1){
     row <- 0
     for(i in 1:npat){
       row <- row+1
-      pat_cant[row,cols] <- length(patern_search(patern = paterns[i,],
+      pat_cant[row,cols] <- length(.patern_search(patern = paterns[i,],
                                                  vector = ref_pat[,cols-1]))
     }
   }
@@ -50,7 +59,7 @@ patern_distans_change <- function(Est_target, Est_reference, reg= 1){
 }
 
 
-patern_search <- function(patern, vector){
+.patern_search <- function(patern, vector){
   #' patern is the patern to look for in the vector,
   #' character is not support
   #' complex numbers are not supported
@@ -68,7 +77,7 @@ patern_search <- function(patern, vector){
 }
 
 
-rank_val <- function(target,rk){
+.rank_val <- function(target,rk){
   #' Get the values of the ranked rk acording the target serie
   #' rk must be numerical
   #' output: a vector of length rk, with the values for that rank

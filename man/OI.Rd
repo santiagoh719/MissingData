@@ -5,7 +5,7 @@
   Filled the ieth data with Optimal Interpolation.
 }
 \usage{
-  OI(Est_target, Est_reference, i, cord= T, criterion = 'Cor' )
+  OI(Est_target, Est_reference, i, cord= T, criterion = 'SBE' )
 
 }
 \arguments{
@@ -15,7 +15,7 @@
 
   \item{i}{integer, index of the value to interpolated in target}
 
-  \item{criterion}{criterion is which criteria to be used to select the fisrt guest value, Max_Cor (default) for the station with maximal correlation, or Nearest for the nearest station. If Nearest cord must be given}
+  \item{criterion}{criterion is which criteria to be used to select the fisrt guest value, SBE (default) for the station with maximal correlation, or NN for the nearest station. If Nearest cord must be given}
 
   \item{cord}{matrix or data.frame, first column Longitude second column Latitude, first row coordinates of the target, then in order the coordinates of Est_reference}
 

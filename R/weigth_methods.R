@@ -7,32 +7,39 @@ UK <-  function(Est_target, Est_reference, i){
   #' Both Est_target and Est_reference must have the same nrows
   #' Also the same start date.
 
-  Est_reference <- as.matrix(Est_reference)
   Est_target <- as.numeric(Est_target)
-  if( i > nrow(Est_reference) | i<0 ){stop('Not aceptable value of i or Est_reference is not matrix nor data.frame')}
-  if(nrow(Est_reference) != length(Est_target)){stop('Not coerent dimentions of Est_reference and Est_target')}
+  Est_reference <- as.matrix(Est_reference)
+  checks <- makeAssertCollection()
+  assert_matrix(x = Est_reference,
+                mode = 'numeric',
+                all.missing = FALSE, add = checks)
+  assert_integerish(x = i, lower = 1,
+                    upper = dim(Est_reference)[1], add = checks)
+  assert_numeric(x = Est_target,
+                 len = dim(Est_reference)[1],
+                 finite = TRUE, all.missing = FALSE, add = checks)
+  reportAssertions(checks)
 
   ind <- !is.na(Est_reference[i,])
   if(all(!(ind))){
     stop('Not enougth stations')
   }
   Est_reference <- Est_reference[,ind]
-  ind <- apply(matrix(as.numeric(!is.na(Est_reference)),ncol=ncol(Est_reference)),2,sum) > 4
-  if(all(!(ind))){
-    stop('Not enougth stations')
-  }
-  if(sum(as.numeric(!is.na(Est_target))) < 4){
-    stop('Not enougth stations')
+
+  if(sum(ind) == 1){
+    warning('only one station used')
+    return(Est_reference[i] * mean(Est_target,na.rm = T) /
+             mean(Est_reference,na.rm = T) )
   }
 
-  Est_reference <- Est_reference[,ind]
   mat_cor <- cor(Est_target,Est_reference,use = 'pairwise.complete.obs')
   if(all(is.na(mat_cor))){
     stop('use another method or use more reference stations')
   }
   est <- which.max(mat_cor)
 
-  return(Est_reference[i,est] * mean(Est_target,na.rm = T)/mean(Est_reference[,est],na.rm = T) )
+  return(Est_reference[i,est] * mean(Est_target,na.rm = T) /
+           mean(Est_reference[,est],na.rm = T) )
 }
 
 NR <- function(Est_target, Est_reference, i){
@@ -44,10 +51,18 @@ NR <- function(Est_target, Est_reference, i){
   #' i the index to by estemated
   #' Both Est_target and Est_reference must have the same nrows
   #' Also the same start date.
-  Est_reference <- as.matrix(Est_reference)
   Est_target <- as.numeric(Est_target)
-  if( i > nrow(Est_reference) | i<0 ){stop('Not aceptable value of i or Est_reference is not matrix nor data.frame')}
-  if(nrow(Est_reference) != length(Est_target)){stop('Not coerent dimentions of Est_reference and Est_target')}
+  Est_reference <- as.matrix(Est_reference)
+  checks <- makeAssertCollection()
+  assert_matrix(x = Est_reference,
+                mode = 'numeric',
+                all.missing = FALSE, add = checks)
+  assert_integerish(x = i, lower = 1,
+                    upper = dim(Est_reference)[1], add = checks)
+  assert_numeric(x = Est_target,
+                 len = dim(Est_reference)[1],
+                 finite = TRUE, all.missing = FALSE, add = checks)
+  reportAssertions(checks)
 
   ind <- !is.na(Est_reference[i,])
   if(all(!(ind))){
@@ -55,12 +70,18 @@ NR <- function(Est_target, Est_reference, i){
   }
   Est_reference <- Est_reference[,ind]
 
+  if(sum(ind) == 1){
+    warning('only one station used')
+    return(Est_reference[i])
+  }
+
   r <- cor(Est_target,Est_reference,use = 'pairwise.complete.obs')
   Est_reference <- Est_reference[,r>0]
   r <- r[r>0]
-  n <- apply(matrix(as.numeric(!is.na(Est_reference)),nrow = nrow(Est_reference)), 2, sum)
+  n <- apply(matrix(as.numeric(!is.na(Est_reference)),
+                    nrow = nrow(Est_reference)), 2, sum)
   w <- r**2 * (n-2) / (1-r**2)
-  return(sum(w*Est_reference[i,],na.rm = T)/sum(w))
+  return(sum(w*Est_reference[i,])/sum(w))
 }
 
 NR_1952 <- function(Est_target, Est_reference, i, tt='month'){
@@ -75,12 +96,19 @@ NR_1952 <- function(Est_target, Est_reference, i, tt='month'){
   #' if tt = month, is monthly data (default)
   #' if tt = hour, is hourly data
   #' if tt = 6hour, is data sample every 6 hours
-
-  Est_reference <- as.matrix(Est_reference)
   Est_target <- as.numeric(Est_target)
-  if( i > nrow(Est_reference) | i<0 ){stop('Not aceptable value of i or Est_reference is not matrix nor data.frame')}
-  if(nrow(Est_reference) != length(Est_target)){stop('Not coerent dimentions of Est_reference and Est_target')}
-
+  Est_reference <- as.matrix(Est_reference)
+  checks <- makeAssertCollection()
+  assert_matrix(x = Est_reference,
+                mode = 'numeric',
+                all.missing = FALSE, add = checks)
+  assert_integerish(x = i, lower = 1,
+                    upper = dim(Est_reference)[1], add = checks)
+  assert_numeric(x = Est_target,
+                 len = dim(Est_reference)[1],
+                 finite = TRUE, all.missing = FALSE, add = checks)
+  assert_character(x = tt, len = 1)
+  reportAssertions(checks)
   n <- length(Est_target)
 
   if(tt=='day'){
@@ -91,7 +119,9 @@ NR_1952 <- function(Est_target, Est_reference, i, tt='month'){
     naux <- 365*24
   }else if(tt=='6hour'){
     naux <- 365*4
-  } else{ stop('No aceptable value of tt given, use either month, day, hour or 6hour')}
+  } else{
+    stop('No aceptable value of tt given, use either month, day, hour or 6hour')
+  }
 
   ind <- !is.na(Est_reference[i,])
   if(all(!(ind))){
@@ -99,12 +129,23 @@ NR_1952 <- function(Est_target, Est_reference, i, tt='month'){
   }
   Est_reference <- Est_reference[,ind]
 
+  pp_target <- mean(rollapply(Est_target,
+                              width=naux,by=naux,FUN = sum ),na.rm = T)
+
+  if(sum(ind) == 1){
+    warning('only one station used')
+    pp_reference <- mean(rollapply(Est_reference,
+                                      width=naux,by=naux,FUN = sum ),na.rm = T)
+    return(Est_reference[i] * pp_target / pp_reference)
+  }
+
   iters <- ncol(Est_reference)
   pp_reference <- vector(mode='double',length = iters)
   for(j in 1:iters){
-    pp_reference[j] <- mean(rollapply(Est_reference[,j],width=naux,by=naux,FUN = sum ),na.rm = T)
+    pp_reference[j] <- mean(rollapply(Est_reference[,j],
+                                      width=naux,by=naux,FUN = sum ),na.rm = T)
   }
-  pp_target <- mean(rollapply(Est_target,width=naux,by=naux,FUN = sum ),na.rm = T)
+
 
   w <- pp_target / pp_reference
 
@@ -119,16 +160,29 @@ CWM <- function(Est_target, Est_reference, i){
   #' i the index to by estemated
   #' Both Est_target and Est_reference must have the same nrows
   #' Also the same start date.
-  Est_reference <- as.matrix(Est_reference)
   Est_target <- as.numeric(Est_target)
-  if( i > nrow(Est_reference) | i<0 ){stop('Not aceptable value of i or Est_reference is not matrix nor data.frame')}
-  if(nrow(Est_reference) != length(Est_target)){stop('Not coerent dimentions of Est_reference and Est_target')}
+  Est_reference <- as.matrix(Est_reference)
+  checks <- makeAssertCollection()
+  assert_matrix(x = Est_reference,
+                mode = 'numeric',
+                all.missing = FALSE, add = checks)
+  assert_integerish(x = i, lower = 1,
+                    upper = dim(Est_reference)[1], add = checks)
+  assert_numeric(x = Est_target,
+                 len = dim(Est_reference)[1],
+                 finite = TRUE, all.missing = FALSE, add = checks)
+  reportAssertions(checks)
 
   ind <- !is.na(Est_reference[i,])
   if(all(!(ind))){
     stop('Not enougth stations')
   }
   Est_reference <- Est_reference[,ind]
+  if(sum(ind) == 1){
+    warning('only one station used')
+    return(Est_reference[i])
+  }
+
   w <- cor(Est_target,Est_reference,use = 'pairwise.complete.obs')
   Est_reference <- Est_reference[,w>0]
   w <- w[w>0]
