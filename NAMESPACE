@@ -37,7 +37,7 @@ export(RMLR_ranked)
 export(MLR_ranked)
 export(TSLR_ranked)
 export(interpolate_all)
-
+export(ADW)
 
 
 
