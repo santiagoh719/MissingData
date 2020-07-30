@@ -2,6 +2,7 @@
 \alias{IDW}
 \alias{IDW_simple}
 \alias{RNNWM}
+\alias{ADW}
 
 \title{Inverse distance weigth interpolation methods}
 \description{
@@ -14,6 +15,7 @@
 
   RNNWM(Est_target, Est_reference, i, k, reg= 1)
 
+  ADW(Est_reference, i, cord, CDD, m = 4)
 }
 \arguments{
   \item{Est_target}{numeric vector, data in which the ieth value will be interpolated}
@@ -29,6 +31,11 @@
   \item{distans}{numeric vector,  in order the distans from target to Est_reference}
 
   \item{reg}{integer value, large of the paterns that will be look for, default 1 acept 1 or 2}
+
+  \item{m}{numeric, exponent of the inverse distance weigth}
+
+  \item{CDD}{numeric, search radius of reference stations (correlation decay distance)}
+
 }
 
 \value{
