@@ -15,7 +15,7 @@ Ord_kriging <- function( Est_reference, i, cord, method = NULL){
                     upper = dim(Est_reference)[1], add = checks)
   assert_matrix(x = cord, ncols = 2,
                 nrows = dim(Est_reference)[2]+1,
-                mode = 'numeric', any.missing = FALSE)
+                mode = 'numeric', any.missing = FALSE, add = checks)
   reportAssertions(checks)
 
   ind <- !is.na(Est_reference[i,])
@@ -77,7 +77,7 @@ KED_Alt <- function(Est_reference, i, cord,method = NULL){
                     upper = dim(Est_reference)[1], add = checks)
   assert_matrix(x = cord, ncols = 3,
                 nrows = dim(Est_reference)[2]+1,
-                mode = 'numeric', any.missing = FALSE)
+                mode = 'numeric', any.missing = FALSE, add = checks)
   reportAssertions(checks)
 
   ind <- !is.na(Est_reference[i,])
@@ -152,7 +152,7 @@ KED <- function(Est_reference,
                     upper = dim(Est_reference)[1], add = checks)
   assert_matrix(x = cord, ncols = 2,
                 nrows = dim(Est_reference)[2]+1,
-                mode = 'numeric', any.missing = FALSE)
+                mode = 'numeric', any.missing = FALSE, add = checks)
   reportAssertions(checks)
 
   ind <- !is.na(Est_reference[i,]) & !is.na(Est_reference_var[i,])

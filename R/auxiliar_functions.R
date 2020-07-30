@@ -76,6 +76,42 @@ patern_distans_change <- function(Est_target, Est_reference, reg = 1){
   return(ind)
 }
 
+.Ang <- function(cord_ref, cord_j, kk){
+
+  lat_ref <- pi/2 - as.numeric(unlist(cord_ref[,2]))*pi/180
+  lon_ref <-  as.numeric(unlist(cord_ref[,1]))*pi/180
+
+  lat_j <-  pi/2 - as.numeric(unlist(cord_j[2]))*pi/180
+  lon_j <-  as.numeric(unlist(cord_j[1]))*pi/180
+
+  lat_k <- lat_ref[kk]
+  lon_k <- lon_ref[kk]
+
+  lat_l <- lat_ref[-kk]
+  lon_l <- lon_ref[-kk]
+
+  delta_jk <- lon_j - lon_k
+
+  cos_akj <- cos(lat_k) * cos(lat_j) + sin(lat_j) * sin(lat_k) * cos(delta_jk)
+
+  delta_lj <- lon_l - lon_j
+  delta_lk <- lon_l - lon_k
+
+  cos_alj <- cos(lat_j) * cos(lat_l) + sin(lat_j) * sin(lat_l) * cos(delta_lj)
+  cos_alk <- cos(lat_k) * cos(lat_l) + sin(lat_k) * sin(lat_l) * cos(delta_lk)
+
+  akj <- acos(cos_akj)
+  alj <- acos(cos_alj)
+
+  Ang <- acos(
+    (cos_alk - cos_alj * cos_akj) /
+      (sin(alj) * sin(akj))
+    )
+
+  return(Ang)
+}
+
+
 
 .rank_val <- function(target,rk){
   #' Get the values of the ranked rk acording the target serie

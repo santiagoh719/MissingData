@@ -1,4 +1,4 @@
-UK <-  function(Est_target, Est_reference, i){
+UK <-  function(Est_target, Est_reference, i, W = NULL){
   #' UK traditional method
   #' Hasanpur Kashani & Dinpashoh 2012
   #' Est_target a vector with the data of the target station
@@ -25,21 +25,41 @@ UK <-  function(Est_target, Est_reference, i){
     stop('Not enougth stations')
   }
   Est_reference <- Est_reference[,ind]
+  if(is.null(W)){
+    if(sum(ind) == 1){
+      warning('only one station used')
+      return(Est_reference[i] * mean(Est_target,na.rm = T) /
+               mean(Est_reference,na.rm = T) )
+    }
 
-  if(sum(ind) == 1){
-    warning('only one station used')
-    return(Est_reference[i] * mean(Est_target,na.rm = T) /
-             mean(Est_reference,na.rm = T) )
+    mat_cor <- cor(Est_target,Est_reference,use = 'pairwise.complete.obs')
+    if(all(is.na(mat_cor))){
+      stop('use another method or use more reference stations')
+    }
+    est <- which.max(mat_cor)
+    return(Est_reference[i,est] * mean(Est_target,na.rm = T) /
+             mean(Est_reference[,est],na.rm = T) )
+  }else{
+    if(length(W) != length(ind) | !is.numeric(W)){
+      stop('If W is given, it must be numeric and of the same length to the amount of reference stations')
+    }
+
+    W <- W[ind]
+    if(sum(ind) == 1){
+      warning('only one station used')
+      return(Est_reference[i] * W )
+    }
+
+    mat_cor <- cor(Est_target,Est_reference,use = 'pairwise.complete.obs')
+    if(all(is.na(mat_cor))){
+      stop('use another method or use more reference stations')
+    }
+
+    est <- which.max(mat_cor)
+    return(Est_reference[i,est] * W[est])
   }
 
-  mat_cor <- cor(Est_target,Est_reference,use = 'pairwise.complete.obs')
-  if(all(is.na(mat_cor))){
-    stop('use another method or use more reference stations')
-  }
-  est <- which.max(mat_cor)
 
-  return(Est_reference[i,est] * mean(Est_target,na.rm = T) /
-           mean(Est_reference[,est],na.rm = T) )
 }
 
 NR <- function(Est_target, Est_reference, i){
@@ -84,7 +104,7 @@ NR <- function(Est_target, Est_reference, i){
   return(sum(w*Est_reference[i,])/sum(w))
 }
 
-NR_1952 <- function(Est_target, Est_reference, i, tt='month'){
+NR_1952 <- function(Est_target, Est_reference, i, tt='month', W = NULL){
   #' Normal Ratio method
   #' Proposed by Paulhus y Kohler 1952
   #' Est_target a vector with the data of the target station
@@ -111,45 +131,50 @@ NR_1952 <- function(Est_target, Est_reference, i, tt='month'){
   reportAssertions(checks)
   n <- length(Est_target)
 
-  if(tt=='day'){
-    naux <- 365
-  }else if(tt=='month'){
-    naux <- 12
-  }else if(tt=='hour'){
-    naux <- 365*24
-  }else if(tt=='6hour'){
-    naux <- 365*4
-  } else{
-    stop('No aceptable value of tt given, use either month, day, hour or 6hour')
-  }
-
   ind <- !is.na(Est_reference[i,])
   if(all(!(ind))){
     stop('Not enougth stations')
   }
   Est_reference <- Est_reference[,ind]
 
-  pp_target <- mean(rollapply(Est_target,
-                              width=naux,by=naux,FUN = sum ),na.rm = T)
+  if(is.null(W)){
+    if(tt=='day'){
+      naux <- 365
+    }else if(tt=='month'){
+      naux <- 12
+    }else if(tt=='hour'){
+      naux <- 365*24
+    }else if(tt=='6hour'){
+      naux <- 365*4
+    } else{
+      stop('No aceptable value of tt given, use either month, day, hour or 6hour')
+    }
+    pp_target <- mean(rollapply(Est_target,
+                                width=naux,by=naux,FUN = sum ),na.rm = T)
 
-  if(sum(ind) == 1){
-    warning('only one station used')
-    pp_reference <- mean(rollapply(Est_reference,
-                                      width=naux,by=naux,FUN = sum ),na.rm = T)
-    return(Est_reference[i] * pp_target / pp_reference)
+    if(sum(ind) == 1){
+      warning('only one station used')
+      pp_reference <- mean(rollapply(Est_reference,
+                                     width=naux,by=naux,FUN = sum ),na.rm = T)
+      return(Est_reference[i] * pp_target / pp_reference)
+    }
+
+    iters <- ncol(Est_reference)
+    pp_reference <- vector(mode='double',length = iters)
+    for(j in 1:iters){
+      pp_reference[j] <- mean(rollapply(Est_reference[,j],
+                                        width=naux,by=naux,FUN = sum ),na.rm = T)
+    }
+
+    W <- pp_target / pp_reference
+  }else{
+    if(length(W) != length(ind) | !is.numeric(W)){
+      stop('If W is given, it must be numeric and of the same length to the amount of reference stations')
+    }
+    W <- W[ind]
   }
 
-  iters <- ncol(Est_reference)
-  pp_reference <- vector(mode='double',length = iters)
-  for(j in 1:iters){
-    pp_reference[j] <- mean(rollapply(Est_reference[,j],
-                                      width=naux,by=naux,FUN = sum ),na.rm = T)
-  }
-
-
-  w <- pp_target / pp_reference
-
-  return(mean(w*Est_reference[i,]))
+  return(mean(W*Est_reference[i,]))
 
 }
 
