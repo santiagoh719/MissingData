@@ -4,15 +4,14 @@ Title: Missing Data Filling
 Version: 1.2
 Author: Hurtado I. Santiago
 Maintainer: Hurtado I. Santiago <santih@carina.fcaglp.unlp.edu.ar>
-Description: This package compute several interpolation method for filling missing data.
-License: file LICENSE
-Depends: R (>= 3.1.0)
+Description: Compute several interpolation method for filling missing data. Simolo, C., Brunetti, M., Maugeri, M., & Nanni, T. (2010) <doi::0.1002/joc.1992>, Presti, R. L., Barca, E., & Passarella, G. (2010) <doi::10.1007/s10661-008-0653-3>, Eischeid, J. K., Pasteris, P. A., Diaz, H. F., Plantico, M. S., & Lott, N. J. (2000) <doi::10.1175/1520-0450(2000)039<1580:CASCND>2.0.CO;2>, Hastie, T., & Tibshirani, R. (1987) <doi::10.1080/01621459.1987.10478440>, Teegavarapu, R. S., & Chandramouli, V. (2005) <doi::10.1016/j.jhydrol.2005.02.015>, New, M., Hulme, M., & Jones, P. (2000) <doi::10.1175/1520-0442(2000)013<2217:RTCSTC>2.0.CO;2>, Erxleben, J., Elder, K., & Davis, R. (2002) <doi::10.1002/hyp.1239>, Sattari, M. T., Rezazadeh-Joudi, A., & Kusiak, A. (2017) <doi::10.2166/nh.2016.364>, Theil, H., (1992) <doi::10.1007/978-94-011-2546-8_20>, Young, K. C. (1992) <doi::10.1175/1520-0493(1992)120<2561:ATWMFI>2.0.CO;2>.
+License: GPL-3
+Depends: R (>= 3.1.0), SignifReg
 Imports: 
         gtools,
         purrr,
         zoo,
         MASS,
-	    SignifReg,
 	    sp,
 	    mblm,
 	    gstat,

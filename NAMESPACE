@@ -38,7 +38,7 @@ export(MLR_ranked)
 export(TSLR_ranked)
 export(interpolate_all)
 export(ADW)
-
+export(Clim_AA)
 
 
 
