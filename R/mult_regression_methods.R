@@ -40,10 +40,11 @@ MLR <- function(Est_target, Est_reference,i, criterion='AIC',alpha=0.05){
     Est_reference <- as.data.frame(Est_reference[,ind])
 
     datos <- cbind(target = Est_target,Est_reference)
+
     fit_model <- lm(target~.,data = datos)
 
     model <- SignifReg(fit = fit_model,
-                       scope = datos,
+                       #scope = datos,
                        alpha=alpha,
                        direction = 'both',
                        criterion = criterion,
@@ -164,8 +165,12 @@ MLR_ranked <- function(Est_target, Est_reference,i, criterion='AIC',alpha=0.05){
                    apply(Est_reference,2,rank,na.last = 'keep'))
     datos <- as.data.frame(datos)
     fit_model <- lm(target~.,data = datos)
-    model <- SignifReg(fit = fit_model,scope = target~.,
-                       alpha=alpha,direction = 'both',criterion = criterion,trace = FALSE)
+    model <- SignifReg(fit = fit_model,
+                       #scope = target~.,
+                       alpha=alpha,
+                       direction = 'both',
+                       criterion = criterion,
+                       trace = FALSE)
 
     est <- t(t(datos[,2:model$rank]) * model$coefficients[2:model$rank])
     rk <- sum(est[i,])+model$coefficients[1]

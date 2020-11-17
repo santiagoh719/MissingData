@@ -1,3 +1,39 @@
+Clim_AA <- function(Est_target, i){
+  #' Temporal Mean
+  #' Est_target a vector with the data of the target station
+  #' i the index to by estemated
+  #' Only for monthly values with all month
+
+  Est_target <- as.numeric(Est_target)
+  checks <- makeAssertCollection()
+  assert_numeric(x = Est_target,
+                 finite = TRUE,
+                 all.missing = FALSE, add = checks)
+  assert_integerish(x = i, lower = 1,
+                    upper = length(Est_target),
+                    add = checks)
+  reportAssertions(checks)
+
+  month_i <- i %% 12
+  if(month_i == 0){
+    month_i = 12
+  }
+
+  nn <- length(Est_target)
+
+  id <- 1:(nn %/% 12) * 12 - 12 + month_i
+
+  if(month_i <= nn%%12){
+    id <- c(id,(nn %/% 12) * 12 + month_i)
+  }
+
+  return(
+    mean(x = Est_target[id],
+         na.rm = TRUE)
+  )
+
+}
+
 
 AA <- function(Est_reference, i){
   #' Simple aritmetric average
