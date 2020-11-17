@@ -25,4 +25,34 @@
   \code{OI},returns ieth data interpolate with the Optimal Interpolation method discribe in E ISCHEID 1999.
 
 }
+\references{
+ - Eischeid, J. K., Pasteris, P. A., Diaz, H. F., Plantico, M. S., & Lott, N. J. (2000). Creating a serially complete, national daily time series of temperature and precipitation for the western United States. Journal of Applied Meteorology, 39(9), 1580-1591. https://doi.org/10.1175/1520-0450(2000)039<1580:CASCND>2.0.CO;2
 
+}
+
+\examples{
+  # Make a Target serie with a seasonal sicle, and a missing value
+  set.seed(524)
+  Est_target <- sin(1:100 * pi/6) * 50 + 70 + rnorm(100, 0, 10)
+  i <- 30
+  Est_target[i] <- NA
+
+  # Make reference station data with 7 stations:
+  Est_reference <- matrix(
+  data = c(sin(1:100 * pi/6) * 100 + 300 + rnorm(100, 0, 50),
+  sin(1:100 * pi/6 +1.5) * 15 + 35 + rnorm(100, 0, 9),
+  sin(1:100 * pi/6 + 2) * 8 + 10 + rnorm(100, 0, 1),
+  sin(1:100 * pi/6 + 1) * 30 + 200 + rnorm(100, 0, 10),
+  sin(1:100 * pi/6 - 1) * 80 + 120 + rnorm(100, 0, 15),
+  sin(1:100 * pi/6 + 0.5) * 40 + 67 + rnorm(100, 0, 10),
+  sin(1:100 * pi/6 -0.5) * 10 + 14 + rnorm(100, 0, 5)),
+  ncol = 7, nrow = 100)
+  Est_reference[Est_reference < 0] <- 0
+
+  cord <- matrix( c(rnorm(8,-27,1),rnorm(8,-61,1)),ncol = 2, nrow = 8)
+
+  # Estimate the ieth value
+  print(
+    OI(Est_target, Est_reference, i)
+  )
+}

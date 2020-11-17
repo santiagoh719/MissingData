@@ -48,3 +48,35 @@
 
 }
 
+\references{
+ - Simolo, C., Brunetti, M., Maugeri, M., & Nanni, T. (2010). Improving estimation of missing values in daily precipitation series by a probability density function‐preserving approach. International Journal of Climatology, 30(10), 1564-1576.  https://doi.org/10.1002/joc.1992
+ - Presti, R. L., Barca, E., & Passarella, G. (2010). A methodology for treating missing data applied to daily rainfall data in the Candelaro River Basin (Italy). Environmental monitoring and assessment, 160(1-4), 1. https://doi.org/10.1007/s10661-008-0653-3
+}
+\examples{
+  # Make a Target serie with a seasonal sicle, and a missing value
+  set.seed(524)
+  Est_target <- sin(1:100 * pi/6) * 50 + 70 + rnorm(100, 0, 10)
+  i <- 30
+  Est_target[i] <- NA
+
+  # Make reference station data with 7 stations:
+  Est_reference <- matrix(
+  data = c(sin(1:100 * pi/6) * 100 + 300 + rnorm(100, 0, 50),
+  sin(1:100 * pi/6 +1.5) * 15 + 35 + rnorm(100, 0, 9),
+  sin(1:100 * pi/6 + 2) * 8 + 10 + rnorm(100, 0, 1),
+  sin(1:100 * pi/6 + 1) * 30 + 200 + rnorm(100, 0, 10),
+  sin(1:100 * pi/6 - 1) * 80 + 120 + rnorm(100, 0, 15),
+  sin(1:100 * pi/6 + 0.5) * 40 + 67 + rnorm(100, 0, 10),
+  sin(1:100 * pi/6 -0.5) * 10 + 14 + rnorm(100, 0, 5)),
+  ncol = 7, nrow = 100)
+  Est_reference[Est_reference < 0] <- 0
+
+  # Estimate the ieth value
+  print(
+    RMLR_ranked(Est_target, Est_reference,i)
+  )
+  print(
+    RMLR(Est_target, Est_reference,i)
+  )
+
+}
